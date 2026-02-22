@@ -49,7 +49,7 @@
     "scripts": {
         "test": "jest",
         "dist": "run-s clean build",
-        "disttest": "npm run dist && http-server dist -o '/embed/index.html?debug=true&language=es&script_path='",
+        "disttest": "npm run dist && http-server dist -o '/embed/index.html?debug=true&language=en&script_path='",
         "compare": "npm run dist && http-server dist -o '/embed/compare.html'",
         "clean": "trash dist",
         "build": "webpack --config webpack.prod.js && node tasks/compile_less.js",
