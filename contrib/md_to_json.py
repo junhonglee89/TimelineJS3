@@ -143,6 +143,9 @@ def section_to_row(heading, body):
             row["Day"] = hd
         if hheadline and not row["Headline"]:
             row["Headline"] = hheadline
+    elif heading.strip() and not row["Headline"]:
+        # No date in heading; use the whole heading as headline
+        row["Headline"] = heading.strip()
     # Strip Obsidian links from text fields
     for key in ("Headline", "Text", "Media Caption", "Media Credit"):
         if row[key]:
