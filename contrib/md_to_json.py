@@ -4,10 +4,10 @@
     (link text is kept when using [[target|display]], otherwise the target name is kept).
 
     MD format: each event/slide is a section starting with ## or ###. Use key: value lines
-    (same names as CSV: Year, Month, Day, Time, End Year, End Month, End Day, End Time,
-    Display Date, Headline, Text, Media, Media Credit, Media Caption, Media Thumbnail,
-    Type, Group, Background). Optional: heading can be "## YYYY-MM-DD" or "## YYYY-MM-DD — Headline"
-    to set start date and/or headline.
+    (same names as CSV: Year, Month, Day, Time, or Start Year, Start Month, Start Day, Start Time;
+    End Year, End Month, End Day, End Time; Display Date, Headline, Text, Media, Media Credit,
+    Media Caption, Media Thumbnail, Type, Group, Background). Optional: heading can be
+    "## YYYY-MM-DD" or "## YYYY-MM-DD — Headline" to set start date and/or headline.
 
     Example:
         ## Title Slide
@@ -29,9 +29,10 @@ import re
 import sys
 from datetime import datetime
 
-# Same as csv_to_json
+# Same as csv_to_json; Start Year/Month/Day/Time are aliases for Year/Month/Day/Time
 HEADERS = [
     "Year", "Month", "Day", "Time",
+    "Start Year", "Start Month", "Start Day", "Start Time",
     "End Year", "End Month", "End Day", "End Time",
     "Display Date",
     "Headline", "Text",
@@ -126,6 +127,12 @@ def parse_key_value_body(body):
 def section_to_row(heading, body):
     """Build a CSV-like dict from one MD section."""
     row = parse_key_value_body(body)
+    # Prefer Start Year/Month/Day/Time from body over Year/Month/Day/Time
+    if row.get("Start Year", "").strip():
+        row["Year"] = row["Year"] or row["Start Year"]
+        row["Month"] = row["Month"] or row.get("Start Month", "")
+        row["Day"] = row["Day"] or row.get("Start Day", "")
+        row["Time"] = row["Time"] or row.get("Start Time", "")
     hy, hm, hd, hheadline = parse_heading_date_and_headline(heading)
     if hy:
         if not row["Year"]:
