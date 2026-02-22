@@ -68,6 +68,13 @@ Text: One of the first women (if not the first woman) to earn a Ph.D in computer
 Media: https://www.women.cs.cmu.edu/ada/Resources/Women/pictures/mary_keller.png
 Media Credit: The Ada Project
 
+## Junhong Test
+Start Year: 1940
+Text: This is the test text. here is [[Too early triggering of deep convection]] link. How it works??
+Media: https://www.women.cs.cmu.edu/ada/Resources/Women/pictures/mary_keller.png
+Media Credit: The Ada Project
+Group: History
+
 ## Karen Spärck Jones makes search possible
 Start Year: 1972
 Text: A professor at Cambridge Computer Laboratory, Spärck Jones was interested in natural language processing and information retrieval. In 1972, she introduced the concept of inverse document frequency, which most search engines still rely on.
