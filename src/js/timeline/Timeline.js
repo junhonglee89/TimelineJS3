@@ -135,7 +135,7 @@ class Timeline {
             language: "en",
             ga_measurement_id: null,
             ga_property_id: null,
-            track_events: ['back_to_start', 'nav_next', 'nav_previous', 'zoom_in', 'zoom_out'],
+            track_events: ['back_to_start', 'nav_next', 'nav_previous', 'zoom_in', 'zoom_out', 'height_increase', 'height_decrease'],
             theme: null,
             // sheets_proxy value should be suitable for simply postfixing with the Google Sheets CSV URL
             // as in include trailing slashes, or '?url=' or whatever. No support right now for anything but
@@ -481,6 +481,8 @@ class Timeline {
         this._menubar.on('zoom_out', this._onZoomOut, this);
         this._menubar.on('forward_to_end', this._onForwardToEnd, this);
         this._menubar.on('back_to_start', this._onBackToStart, this);
+        this._menubar.on('height_increase', this._onHeightIncrease, this);
+        this._menubar.on('height_decrease', this._onHeightDecrease, this);
 
     }
 
@@ -544,6 +546,38 @@ class Timeline {
     _onZoomOut(e) {
         this._timenav.zoomOut();
         this.fire("zoom_out", { zoom_level: this._timenav.options.scale_factor }, this);
+    }
+
+    _onHeightIncrease(e) {
+        this._resizeTimeNavHeight(1);
+        this.fire("height_increase", { timenav_height: this.options.timenav_height }, this);
+    }
+
+    _onHeightDecrease(e) {
+        this._resizeTimeNavHeight(-1);
+        this.fire("height_decrease", { timenav_height: this.options.timenav_height }, this);
+    }
+
+    /**
+     * Change timenav (bottom timeline strip) height by one step.
+     * @param {number} direction - 1 to increase height, -1 to decrease
+     */
+    _resizeTimeNavHeight(direction) {
+        var step = this.options.timenav_resize_step != null ? this.options.timenav_resize_step : 60;
+        var minH = this.options.timenav_height_min;
+        if (this._timenav.ready && this._timenav.getMinimumHeight() > minH) {
+            minH = this._timenav.getMinimumHeight();
+        }
+        var maxH = this.options.height - 120;
+        if (maxH < minH) maxH = minH;
+        var current = this._el.timenav ? this._el.timenav.offsetHeight : Math.round((this.options.height / 100) * this.options.timenav_height_percentage);
+        if (this.options.timenav_height_override != null) {
+            current = this.options.timenav_height_override;
+        }
+        var newHeight = current + (direction * step);
+        newHeight = Math.max(minH, Math.min(maxH, Math.round(newHeight)));
+        this.options.timenav_height_override = newHeight;
+        this.updateDisplay();
     }
 
     _onTimeNavLoaded() {
@@ -697,9 +731,20 @@ class Timeline {
 
         var height = 0;
 
-        if (false) { 
-            // was if (timenav_height) but that led to repetitive application
-            // of the padding adjustment at the en
+        if (this.options.timenav_height_override != null && this.options.timenav_height_override > 0) {
+            height = this.options.timenav_height_override;
+            if (this._timenav.ready) {
+                if (this.options.timenav_height_min < this._timenav.getMinimumHeight()) {
+                    this.options.timenav_height_min = this._timenav.getMinimumHeight();
+                }
+            }
+            if (height < this.options.timenav_height_min) {
+                height = this.options.timenav_height_min;
+            }
+            return height;
+        }
+
+        if (false) {
             height = timenav_height;
         } else {
             if (this.options.timenav_height_percentage || timenav_height_percentage) {

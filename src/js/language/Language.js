@@ -296,6 +296,8 @@ var LANGUAGES = {
             swipe_to_navigate: "Swipe to Navigate<br><span class='tl-button'>OK</span>",
             zoom_in: "Zoom in",
             zoom_out: "Zoom out",
+            height_increase: "Increase timeline strip height",
+            height_decrease: "Decrease timeline strip height",
             unknown_read_err: "An unexpected error occurred trying to read your spreadsheet data",
             invalid_url_err: "Unable to read Timeline data. Make sure your URL is for a Google Spreadsheet or a Timeline JSON file.",
             network_err: "Unable to read your Google Spreadsheet. Make sure you have published it to the web.",

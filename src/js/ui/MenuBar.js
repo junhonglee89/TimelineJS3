@@ -17,6 +17,8 @@ export class MenuBar {
             button_backtostart: {},
             button_zoomin: {},
             button_zoomout: {},
+            button_height_increase: {},
+            button_height_decrease: {},
             arrow: {},
             line: {},
             coverbar: {},
@@ -148,6 +150,14 @@ export class MenuBar {
         this.fire("back_to_start", e);
     }
 
+    _onButtonHeightIncrease(e) {
+        this.fire("height_increase", e);
+    }
+
+    _onButtonHeightDecrease(e) {
+        this.fire("height_decrease", e);
+    }
+
 
     /*	Private Methods
     ================================================== */
@@ -158,6 +168,8 @@ export class MenuBar {
         this._el.button_zoomout = DOM.createButton('tl-menubar-button', this._el.container);
         this._el.button_forwardtoend = DOM.createButton('tl-menubar-button', this._el.container);
         this._el.button_backtostart = DOM.createButton('tl-menubar-button', this._el.container);
+        this._el.button_height_increase = DOM.createButton('tl-menubar-button', this._el.container);
+        this._el.button_height_decrease = DOM.createButton('tl-menubar-button', this._el.container);
 
         if (Browser.mobile) {
             this._el.container.setAttribute("ontouchstart", " ");
@@ -174,6 +186,12 @@ export class MenuBar {
 
         this._el.button_zoomout.innerHTML = "<span class='tl-icon-zoom-out'></span>";
         this._el.button_zoomout.setAttribute('aria-label', this._('zoom_out'));
+
+        this._el.button_height_increase.innerHTML = "<span class='tl-icon-arrow-up'></span>";
+        this._el.button_height_increase.setAttribute('aria-label', this._('height_increase'));
+
+        this._el.button_height_decrease.innerHTML = "<span class='tl-icon-arrow-down'></span>";
+        this._el.button_height_decrease.setAttribute('aria-label', this._('height_decrease'));
     }
 
     _initEvents() {
@@ -181,6 +199,8 @@ export class MenuBar {
         DOMEvent.addListener(this._el.button_backtostart, 'click', this._onButtonBackToStart, this);
         DOMEvent.addListener(this._el.button_zoomin, 'click', this._onButtonZoomIn, this);
         DOMEvent.addListener(this._el.button_zoomout, 'click', this._onButtonZoomOut, this);
+        DOMEvent.addListener(this._el.button_height_increase, 'click', this._onButtonHeightIncrease, this);
+        DOMEvent.addListener(this._el.button_height_decrease, 'click', this._onButtonHeightDecrease, this);
     }
 
     // Update Display
